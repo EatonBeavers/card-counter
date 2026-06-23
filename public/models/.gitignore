@@ -1,0 +1,3 @@
+# Keep models directory; speech model is downloaded via scripts/download-vosk-model.sh
+*
+!.gitignore

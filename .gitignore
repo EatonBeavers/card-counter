@@ -1,0 +1,11 @@
+node_modules
+dist
+dist-electron
+release
+*.log
+.DS_Store
+.vite
+public/models/*.tar.gz
+public/models/.vosk-dl
+.env
+.env.*

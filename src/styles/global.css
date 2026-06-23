@@ -1,0 +1,152 @@
+/* ===========================================================================
+   Card Counter — global theme. Dark-first, high-contrast, analytical.
+   Light theme overrides live under [data-theme='light'].
+   =========================================================================== */
+
+:root,
+:root[data-theme='dark'] {
+  --bg: #0c0f14;
+  --bg-elev: #131820;
+  --bg-elev-2: #1a212c;
+  --panel: #11161e;
+  --border: #232c3a;
+  --border-strong: #324155;
+
+  --text: #e6edf6;
+  --text-dim: #9aa7b8;
+  --text-faint: #61708a;
+
+  --accent: #4f9dff;
+  --accent-dim: #2c5f9e;
+
+  --pos: #36d399;
+  --neg: #f87272;
+  --neutral: #8b96a8;
+  --strong: #facc15;
+  --burn: #c084fc;
+
+  --zone-negative: #f87272;
+  --zone-neutral: #8b96a8;
+  --zone-positive: #36d399;
+  --zone-strong: #facc15;
+
+  --shadow: 0 6px 24px rgba(0, 0, 0, 0.45);
+  --radius: 10px;
+  --radius-sm: 6px;
+  --mono: 'SF Mono', 'JetBrains Mono', 'Cascadia Code', Consolas, monospace;
+  --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+:root[data-theme='light'] {
+  --bg: #f2f4f8;
+  --bg-elev: #ffffff;
+  --bg-elev-2: #eef1f6;
+  --panel: #ffffff;
+  --border: #d7deea;
+  --border-strong: #bcc7d8;
+
+  --text: #131820;
+  --text-dim: #4a5566;
+  --text-faint: #8290a4;
+
+  --accent: #2b6fd6;
+  --accent-dim: #87b3ed;
+
+  --pos: #128a5e;
+  --neg: #cf3b3b;
+  --neutral: #6b7686;
+  --strong: #b88600;
+  --burn: #9333ea;
+
+  --zone-negative: #cf3b3b;
+  --zone-neutral: #6b7686;
+  --zone-positive: #128a5e;
+  --zone-strong: #b88600;
+
+  --shadow: 0 4px 18px rgba(20, 30, 50, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+  overflow: hidden;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+  font-weight: 600;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.mono {
+  font-family: var(--mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Utility chips / badges -------------------------------------------------- */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  background: var(--bg-elev-2);
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+  white-space: nowrap;
+}
+.badge.accent {
+  background: var(--accent-dim);
+  color: #fff;
+  border-color: transparent;
+}
+.badge.warn {
+  background: rgba(250, 204, 21, 0.14);
+  color: var(--strong);
+  border-color: rgba(250, 204, 21, 0.3);
+}
+
+.text-dim {
+  color: var(--text-dim);
+}
+.text-faint {
+  color: var(--text-faint);
+}

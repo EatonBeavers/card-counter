@@ -1,0 +1,101 @@
+import { defineSystem } from './defineSystem';
+import type { CountSystem } from '../../types';
+
+// Classic integer (and fractional) systems. Weights ordered A,2,3,4,5,6,7,8,9,T.
+// Standard published tag values are used. Where a weight table is commonly
+// reported with minor variants, the most widely cited version is used and noted.
+
+export const CLASSIC_SYSTEMS: CountSystem[] = [
+  defineSystem({
+    id: 'hi-lo',
+    name: 'Hi-Lo',
+    category: 'Classic integer',
+    description: 'The standard balanced Level-1 count; the de-facto reference system.',
+    tags: ['level-1', 'balanced', 'ace-reckoned', 'beginner'],
+    weights: { A: -1, '2': 1, '3': 1, '4': 1, '5': 1, '6': 1, '7': 0, '8': 0, '9': 0, T: -1 },
+    metrics: { pe: 0.51, bc: 0.97, ic: 0.76, upm: 0.8195238095238095 },
+    notes: 'Easiest to run accurately at speed. Best entry point; strong betting correlation.',
+  }),
+  defineSystem({
+    id: 'hi-opt-ii',
+    name: 'Hi-Opt II',
+    category: 'Classic integer',
+    description: 'Balanced Level-2 ace-neutral count; pairs well with an ace side count.',
+    tags: ['level-2', 'balanced', 'ace-neutral'],
+    weights: { A: 0, '2': 1, '3': 1, '4': 2, '5': 2, '6': 1, '7': 1, '8': 0, '9': 0, T: -2 },
+    metrics: { pe: 0.67, bc: 0.91, ic: 0.91, upm: 0.9257142857142858 },
+    notes: 'Strong playing efficiency. Keep a separate ace count for betting accuracy.',
+  }),
+  defineSystem({
+    id: 'omega-ii',
+    name: 'Omega II',
+    category: 'Classic integer',
+    description: 'Balanced Level-2 ace-neutral count by Bryce Carlson.',
+    tags: ['level-2', 'balanced', 'ace-neutral'],
+    weights: { A: 0, '2': 1, '3': 1, '4': 2, '5': 2, '6': 2, '7': 1, '8': 0, '9': -1, T: -2 },
+    metrics: { pe: 0.67, bc: 0.92, ic: 0.85, upm: 0.9090476190476192 },
+    notes: 'Excellent all-around Level-2 system; 9 is negative which trips up beginners.',
+  }),
+  defineSystem({
+    id: 'zen-count',
+    name: 'Zen Count',
+    category: 'Classic integer',
+    description: 'Balanced Level-2 partial-ace count by Arnold Snyder.',
+    tags: ['level-2', 'balanced', 'ace-reckoned'],
+    weights: { A: -1, '2': 1, '3': 1, '4': 2, '5': 2, '6': 2, '7': 1, '8': 0, '9': 0, T: -2 },
+    metrics: { pe: 0.63, bc: 0.96, ic: 0.85, upm: 0.9033333333333332 },
+    notes: 'Ace counted as -1 balances betting and playing without a side count.',
+  }),
+  defineSystem({
+    id: 'wong-halves',
+    name: 'Wong Halves',
+    category: 'Classic integer',
+    description: 'Balanced Level-3 fractional count by Stanford Wong; very high BC.',
+    tags: ['level-3', 'balanced', 'ace-reckoned', 'fractional'],
+    weights: {
+      A: -1, '2': 0.5, '3': 1, '4': 1, '5': 1.5, '6': 1, '7': 0.5, '8': 0, '9': -0.5, T: -1,
+    },
+    metrics: { pe: 0.56, bc: 0.99, ic: 0.72, upm: 0.8366666666666666 },
+    notes: 'Often run doubled (x2) to keep integers. Demanding but near-optimal for betting.',
+  }),
+  defineSystem({
+    id: 'uston-apc',
+    name: 'Uston APC',
+    category: 'Classic integer',
+    description: 'Uston Advanced Point Count: balanced Level-3 ace-neutral system.',
+    tags: ['level-3', 'balanced', 'ace-neutral'],
+    weights: { A: 0, '2': 1, '3': 2, '4': 2, '5': 3, '6': 2, '7': 2, '8': 1, '9': -1, T: -3 },
+    metrics: { pe: 0.69, bc: 0.9, ic: 0.9, upm: 0.9285714285714284 },
+    notes: 'Highest playing efficiency among classics; expert-level, needs an ace side count.',
+  }),
+  defineSystem({
+    id: 'revere-pt',
+    name: 'Revere Point Count',
+    category: 'Classic integer',
+    description: 'Lawrence Revere balanced Level-2 ace-reckoned count.',
+    tags: ['level-2', 'balanced', 'ace-reckoned'],
+    weights: { A: -2, '2': 1, '3': 2, '4': 2, '5': 2, '6': 2, '7': 1, '8': 0, '9': 0, T: -2 },
+    metrics: { pe: 0.55, bc: 0.99, ic: 0.78, upm: 0.851904761904762 },
+    notes: 'Very strong betting correlation. Weights per Revere "Playing Blackjack as a Business".',
+  }),
+  defineSystem({
+    id: 'revere-rapc',
+    name: 'Revere RAPC',
+    category: 'Classic integer',
+    description: 'Revere Advanced Point Count: balanced Level-4 ace-reckoned count.',
+    tags: ['level-4', 'balanced', 'ace-reckoned'],
+    weights: { A: -4, '2': 2, '3': 3, '4': 3, '5': 4, '6': 3, '7': 2, '8': 0, '9': -1, T: -3 },
+    metrics: { pe: 0.53, bc: 1.0, ic: 0.71, upm: 0.8223809523809523 },
+    notes: 'Perfect betting correlation; Level-4 makes it impractical for live play.',
+  }),
+  defineSystem({
+    id: 'revere-14',
+    name: 'Revere 14 Count',
+    category: 'Classic integer',
+    description: 'Revere Fourteen Count: balanced Level-4 ace-neutral count.',
+    tags: ['level-4', 'balanced', 'ace-neutral'],
+    weights: { A: 0, '2': 2, '3': 2, '4': 3, '5': 4, '6': 2, '7': 1, '8': 0, '9': -2, T: -3 },
+    metrics: { pe: 0.65, bc: 0.92, ic: 0.82, upm: 0.8895238095238095 },
+    notes: 'High playing efficiency. Weight table is best-effort; verify against your source.',
+  }),
+];
