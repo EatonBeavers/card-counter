@@ -1,5 +1,10 @@
 # Card Counter
-
+Eaton Beavers
+<img 
+  src="https://raw.githubusercontent.com/EatonBeavers/card-counter/main/banner.jpg" 
+  width="100%" 
+  alt="EatonBeavers"
+/>
 A **local-first** desktop blackjack **card-counting trainer and live-session assistant** for Windows (also builds on macOS/Linux). Built with **Electron + React + TypeScript + Vite**. Runs entirely offline — no cloud, no telemetry.
 
 Enter dealt cards by keyboard, click, or **offline voice**; pick from 13 counting systems; get running count, true count, betting guidance, insurance prompts, and a **session database** for reviewing profitable table conditions.
