@@ -215,6 +215,9 @@ ipcMain.handle('session:listDetails', async () => {
           durationMs?: number;
           maxPenetration?: number;
           tcStrongPct?: number;
+          netPnL?: number;
+          winRate?: number;
+          handsLogged?: number;
         };
         session?: { updatedAt?: number; systemId?: string };
       };
@@ -234,6 +237,9 @@ ipcMain.handle('session:listDetails', async () => {
           durationMs: data.summary.durationMs ?? 0,
           maxPenetration: data.summary.maxPenetration ?? 0,
           tcStrongPct: data.summary.tcStrongPct ?? 0,
+          netPnL: data.summary.netPnL ?? 0,
+          winRate: data.summary.winRate ?? 0,
+          handsLogged: data.summary.handsLogged ?? 0,
         });
       } else if (data.session) {
         items.push({
@@ -249,6 +255,9 @@ ipcMain.handle('session:listDetails', async () => {
           durationMs: 0,
           maxPenetration: 0,
           tcStrongPct: 0,
+          netPnL: 0,
+          winRate: 0,
+          handsLogged: 0,
         });
       }
     } catch {

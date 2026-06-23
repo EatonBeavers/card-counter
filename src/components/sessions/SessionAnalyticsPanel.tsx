@@ -1,4 +1,4 @@
-import { formatCount } from '../../engine';
+import { formatCount, formatMoney } from '../../engine';
 import { getSystemOrDefault } from '../../data/countSystems';
 import type { DisplayPrecision } from '../../types';
 import type { SessionMeta, SessionSummary } from '../../types/session';
@@ -81,6 +81,54 @@ export function SessionAnalyticsPanel({ summary, meta, precision, title }: Props
           <div className="value">{duration(summary.durationMs)}</div>
         </div>
       </div>
+
+      {summary.handsLogged > 0 && (
+        <>
+          <div className="panel-title" style={{ marginTop: 14, marginBottom: 8 }}>
+            Profit &amp; loss (logged hands)
+          </div>
+          <div className="stat-grid">
+            <div className="stat-cell">
+              <div className="label">Net P&amp;L</div>
+              <div className={`value ${summary.netPnL >= 0 ? 'text-pos' : 'text-neg'}`}>
+                {summary.netPnL >= 0 ? '+' : ''}
+                {formatMoney(summary.netPnL)}
+              </div>
+            </div>
+            <div className="stat-cell">
+              <div className="label">Ending bankroll</div>
+              <div className="value">{formatMoney(summary.endingBankroll)}</div>
+            </div>
+            <div className="stat-cell">
+              <div className="label">Hands logged</div>
+              <div className="value">{summary.handsLogged}</div>
+            </div>
+            <div className="stat-cell">
+              <div className="label">Win rate</div>
+              <div className="value">{(summary.winRate * 100).toFixed(0)}%</div>
+            </div>
+            <div className="stat-cell">
+              <div className="label">Wagered</div>
+              <div className="value">{formatMoney(summary.totalWagered)}</div>
+            </div>
+            <div className="stat-cell">
+              <div className="label">ROI</div>
+              <div className="value">{(summary.roi * 100).toFixed(1)}%</div>
+            </div>
+            <div className="stat-cell">
+              <div className="label">Max drawdown</div>
+              <div className="value">{formatMoney(summary.maxDrawdown)}</div>
+            </div>
+            <div className="stat-cell">
+              <div className="label">W / L / Push</div>
+              <div className="value" style={{ fontSize: 13 }}>
+                {summary.wins + summary.blackjacks} / {summary.losses + summary.surrenders} /{' '}
+                {summary.pushes}
+              </div>
+            </div>
+          </div>
+        </>
+      )}
 
       <div className="zone-bars" style={{ marginTop: 14 }}>
         <div className="panel-title" style={{ marginBottom: 8 }}>

@@ -66,7 +66,7 @@ export function AboutView(): JSX.Element {
           <h2>About</h2>
           <div className="sub">Card Counter · local-first blackjack trainer & live-session assistant</div>
         </div>
-        <span className="badge">v0.2.0</span>
+        <span className="badge">v0.3.0</span>
       </div>
 
       <div className="panel">

@@ -649,3 +649,41 @@ input[type='range'] {
   font-size: 11px;
 }
 
+.text-pos {
+  color: var(--pos);
+}
+.text-neg {
+  color: var(--neg);
+}
+
+.outcome-btns {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+}
+@media (max-width: 900px) {
+  .outcome-btns {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+.btn.outcome-btn {
+  font-size: 11px;
+  padding: 8px 4px;
+}
+.btn.outcome-btn.pos {
+  border-color: rgba(74, 222, 128, 0.4);
+  color: var(--pos);
+}
+.btn.outcome-btn.neg {
+  border-color: rgba(248, 114, 114, 0.4);
+  color: var(--neg);
+}
+.btn.outcome-btn.strong {
+  border-color: rgba(96, 165, 250, 0.5);
+  color: var(--accent);
+}
+.btn.outcome-btn.warn {
+  border-color: rgba(251, 191, 36, 0.45);
+  color: #fbbf24;
+}
+

@@ -27,6 +27,21 @@ export interface CountSnapshot {
 
 export type SessionType = 'practice' | 'live' | 'simulation';
 
+export type RoundOutcome = 'win' | 'loss' | 'push' | 'blackjack' | 'surrender';
+
+/** Resolved hand result with wager and count context at resolution time. */
+export interface RoundRecord {
+  id: string;
+  /** 0-based round index matching card events. */
+  round: number;
+  at: number;
+  outcome: RoundOutcome;
+  bet: number;
+  netResult: number;
+  trueCount: number;
+  runningCount: number;
+}
+
 export interface SessionState {
   id: string;
   name: string;
@@ -48,6 +63,8 @@ export interface SessionState {
   sessionType: SessionType;
   /** Incremented each time the shoe is reset mid-session. */
   shoeResets: number;
+  /** Per-hand win/loss/P&L log. */
+  roundOutcomes: RoundRecord[];
 }
 
 /** Frozen table + betting context captured when a session is saved. */
@@ -86,6 +103,19 @@ export interface SessionSummary {
   avgRecommendedBet: number;
   /** TC bucket histogram (integer floor TC, clamped −5..+8) */
   tcHistogram: Array<{ tc: number; count: number }>;
+  /** Hands with a logged outcome */
+  handsLogged: number;
+  wins: number;
+  losses: number;
+  pushes: number;
+  blackjacks: number;
+  surrenders: number;
+  netPnL: number;
+  totalWagered: number;
+  roi: number;
+  winRate: number;
+  endingBankroll: number;
+  maxDrawdown: number;
 }
 
 /** Full saved session package written to disk / local database. */
@@ -112,4 +142,7 @@ export interface SessionListItem {
   durationMs: number;
   maxPenetration: number;
   tcStrongPct: number;
+  netPnL: number;
+  winRate: number;
+  handsLogged: number;
 }

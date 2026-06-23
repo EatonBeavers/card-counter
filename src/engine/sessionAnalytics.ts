@@ -6,6 +6,7 @@ import type {
   SessionSummary,
 } from '../types';
 import { advantageZone, recommendBet } from './betEngine';
+import { computePnlStats } from './sessionPnl';
 
 const TC_HIST_MIN = -5;
 const TC_HIST_MAX = 8;
@@ -39,6 +40,7 @@ export function computeSessionSummary(session: SessionState, meta: SessionMeta):
   const system = getSystemOrDefault(meta.systemId);
 
   if (history.length === 0) {
+    const pnl = computePnlStats(session.roundOutcomes ?? [], meta.rules.startingBankroll);
     return {
       cardsSeen: 0,
       roundsPlayed: 0,
@@ -58,6 +60,7 @@ export function computeSessionSummary(session: SessionState, meta: SessionMeta):
       totalRecommendedWager: 0,
       avgRecommendedBet: 0,
       tcHistogram: emptyHistogram(),
+      ...pnl,
     };
   }
 
@@ -98,6 +101,7 @@ export function computeSessionSummary(session: SessionState, meta: SessionMeta):
   const avgPositiveTc = positiveCount > 0 ? positiveTcSum / positiveCount : 0;
   const positiveRate = positiveCount / history.length;
   const edgeProxy = system.metrics.bc * avgPositiveTc * positiveRate;
+  const pnl = computePnlStats(session.roundOutcomes ?? [], meta.rules.startingBankroll);
 
   return {
     cardsSeen: last.cardsSeen,
@@ -118,5 +122,6 @@ export function computeSessionSummary(session: SessionState, meta: SessionMeta):
     totalRecommendedWager,
     avgRecommendedBet: totalRecommendedWager / history.length,
     tcHistogram: histogram,
+    ...pnl,
   };
 }

@@ -59,6 +59,9 @@ export function sessionListItem(name: string, record: SessionRecord): SessionLis
     durationMs: summary.durationMs,
     maxPenetration: summary.maxPenetration,
     tcStrongPct: summary.tcStrongPct,
+    netPnL: summary.netPnL,
+    winRate: summary.winRate,
+    handsLogged: summary.handsLogged,
   };
 }
 
@@ -97,5 +100,6 @@ function migrateSessionState(data: unknown): SessionState {
     ...s,
     sessionType: s.sessionType ?? 'practice',
     shoeResets: s.shoeResets ?? 0,
+    roundOutcomes: s.roundOutcomes ?? [],
   };
 }

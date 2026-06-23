@@ -1,6 +1,6 @@
 {
   "name": "card-counter",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Local-first blackjack card-counting trainer & live-session assistant (Electron + React + TypeScript)",
   "private": false,
   "type": "module",

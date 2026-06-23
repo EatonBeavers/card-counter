@@ -5,6 +5,7 @@ import { BettingPanel } from '../components/live/BettingPanel';
 import { DecksPanel } from '../components/live/DecksPanel';
 import { SystemInfoPanel } from '../components/live/SystemInfoPanel';
 import { InsurancePanel } from '../components/live/InsurancePanel';
+import { RoundOutcomePanel } from '../components/live/RoundOutcomePanel';
 import { SessionLogPanel } from '../components/live/SessionLogPanel';
 import { CheatSheet } from '../components/live/CheatSheet';
 import { useKeyboardInput } from '../hooks/useKeyboardInput';
@@ -43,6 +44,7 @@ export function LiveCountView(): JSX.Element {
       <div className="col-right">
         <div className="stack">
           <BettingPanel />
+          <RoundOutcomePanel />
           <InsurancePanel />
           <DecksPanel />
           <SystemInfoPanel />

@@ -13,6 +13,7 @@ export function CheatSheet({ onClose }: CheatSheetProps): JSX.Element {
     ['Burn card', 'Shift + rank · or say "burn ace"'],
     ['Undo last card', kb.undo],
     ['Next round', kb.nextRound],
+    ['Log hand result', 'Hand Result panel — Win / Loss / Push / BJ / Surrender'],
     ['Reset shoe', kb.reset],
     ['Toggle insurance', kb.toggleInsurance],
     ['Close this sheet', 'Esc or ?'],

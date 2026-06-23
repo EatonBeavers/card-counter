@@ -54,7 +54,12 @@ function sessionWithHistory(
     decksRemainingOverride: null,
     sessionType: 'practice',
     shoeResets: 0,
+    roundOutcomes: [],
   };
+}
+
+function sessionWithOutcomes(outcomes: SessionState['roundOutcomes']): SessionState {
+  return { ...sessionWithHistory([]), roundOutcomes: outcomes };
 }
 
 describe('computeSessionSummary', () => {
@@ -91,5 +96,35 @@ describe('computeSessionSummary', () => {
     const s = computeSessionSummary(sessionWithHistory(history, events), meta);
     expect(s.roundsPlayed).toBe(2);
     expect(s.burnCards).toBe(1);
+  });
+
+  it('aggregates P&L from round outcomes', () => {
+    const session = sessionWithOutcomes([
+      {
+        id: 'r1',
+        round: 0,
+        at: 1000,
+        outcome: 'win',
+        bet: 100,
+        netResult: 100,
+        trueCount: 2,
+        runningCount: 4,
+      },
+      {
+        id: 'r2',
+        round: 1,
+        at: 2000,
+        outcome: 'loss',
+        bet: 100,
+        netResult: -100,
+        trueCount: -1,
+        runningCount: -2,
+      },
+    ]);
+    const s = computeSessionSummary(session, meta);
+    expect(s.handsLogged).toBe(2);
+    expect(s.netPnL).toBe(0);
+    expect(s.totalWagered).toBe(200);
+    expect(s.winRate).toBe(0.5);
   });
 });

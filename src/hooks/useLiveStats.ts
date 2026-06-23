@@ -5,6 +5,7 @@ import { getSystemOrDefault } from '../data/countSystems';
 import { recommendBet } from '../engine';
 import type { BetRecommendation, CountSystem } from '../types';
 import type { LiveStats } from '../state/derive';
+import { sessionBankroll } from '../engine/sessionPnl';
 
 export interface LiveView {
   system: CountSystem;
@@ -24,11 +25,12 @@ export function useLiveStats(): LiveView {
     const system = getSystemOrDefault(session.systemId);
     const stats = deriveLiveStats(session, system, rules, settings);
     const ramp = ramps.find((r) => r.id === activeRampId) ?? ramps[0]!;
+    const bankroll = sessionBankroll(session, rules.startingBankroll);
     const recommendation = recommendBet(
       stats.trueCount,
       ramp,
       rules,
-      rules.startingBankroll,
+      bankroll,
       settings.bankrollRiskFraction,
     );
     return { system, stats, recommendation };

@@ -1,11 +1,18 @@
 import { useMemo, useState } from 'react';
-import { formatCount } from '../../engine';
+import { formatCount, formatMoney } from '../../engine';
 import type { DisplayPrecision, SessionListItem } from '../../types';
 import { Panel } from '../ui/Panel';
 
 type SortKey = keyof Pick<
   SessionListItem,
-  'savedAt' | 'peakTrueCount' | 'edgeProxy' | 'cardsSeen' | 'tcStrongPct' | 'maxPenetration'
+  | 'savedAt'
+  | 'peakTrueCount'
+  | 'edgeProxy'
+  | 'cardsSeen'
+  | 'tcStrongPct'
+  | 'maxPenetration'
+  | 'netPnL'
+  | 'winRate'
 >;
 
 interface Props {
@@ -93,6 +100,12 @@ export function SessionDatabaseTable({
               <th className="num sortable" onClick={() => toggleSort('tcStrongPct')}>
                 TC≥3{sortMark('tcStrongPct')}
               </th>
+              <th className="num sortable" onClick={() => toggleSort('netPnL')}>
+                P&amp;L{sortMark('netPnL')}
+              </th>
+              <th className="num sortable" onClick={() => toggleSort('winRate')}>
+                Win%{sortMark('winRate')}
+              </th>
               <th className="num sortable" onClick={() => toggleSort('maxPenetration')}>
                 Pen%{sortMark('maxPenetration')}
               </th>
@@ -119,6 +132,12 @@ export function SessionDatabaseTable({
                 <td className="num">{formatCount(row.peakTrueCount, precision)}</td>
                 <td className="num">{row.edgeProxy.toFixed(3)}</td>
                 <td className="num">{row.tcStrongPct.toFixed(0)}%</td>
+                <td className={`num ${row.netPnL >= 0 ? 'text-pos' : 'text-neg'}`}>
+                  {row.handsLogged > 0 ? formatMoney(row.netPnL) : '—'}
+                </td>
+                <td className="num">
+                  {row.handsLogged > 0 ? `${(row.winRate * 100).toFixed(0)}%` : '—'}
+                </td>
                 <td className="num">{(row.maxPenetration * 100).toFixed(0)}%</td>
                 <td className="num" onClick={(e) => e.stopPropagation()}>
                   <button className="btn ghost sm" onClick={() => onLoad(row.name)}>
@@ -142,6 +161,7 @@ export function SessionAggregateBar({ items }: { items: SessionListItem[] }): JS
 
   const totalCards = items.reduce((s, i) => s + i.cardsSeen, 0);
   const totalDuration = items.reduce((s, i) => s + i.durationMs, 0);
+  const totalPnL = items.reduce((s, i) => s + i.netPnL, 0);
   const bestPeak = Math.max(...items.map((i) => i.peakTrueCount));
   const avgEdge = items.reduce((s, i) => s + i.edgeProxy, 0) / items.length;
   const liveSessions = items.filter((i) => i.sessionType === 'live').length;
@@ -159,6 +179,12 @@ export function SessionAggregateBar({ items }: { items: SessionListItem[] }): JS
       <div className="agg-cell">
         <span className="label">Total cards</span>
         <span className="value">{totalCards.toLocaleString()}</span>
+      </div>
+      <div className="agg-cell">
+        <span className="label">Total P&amp;L</span>
+        <span className={`value ${totalPnL >= 0 ? 'text-pos' : 'text-neg'}`}>
+          {formatMoney(totalPnL)}
+        </span>
       </div>
       <div className="agg-cell">
         <span className="label">Best peak TC</span>

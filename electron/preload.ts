@@ -23,6 +23,9 @@ const api = {
         durationMs: number;
         maxPenetration: number;
         tcStrongPct: number;
+        netPnL: number;
+        winRate: number;
+        handsLogged: number;
       }>
     >,
   deleteSession: (name: string) =>

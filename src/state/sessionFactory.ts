@@ -22,6 +22,7 @@ export function createSession(systemId: string, name?: string): SessionState {
     decksRemainingOverride: null,
     sessionType: 'practice',
     shoeResets: 0,
+    roundOutcomes: [],
   };
 }
 

@@ -16,9 +16,12 @@ import { isDesktop } from '../types';
 import { getSystemOrDefault } from '../data/countSystems';
 import { DEFAULT_BET_RAMPS } from '../data/betRamps';
 import { DEFAULT_RULESET, DEFAULT_SETTINGS } from '../data/defaults';
+import { recommendBet } from '../engine';
 import { createSession, makeId } from './sessionFactory';
 import { deriveLiveStats } from './derive';
+import { buildRoundRecord, sessionBankroll } from '../engine/sessionPnl';
 import { buildSessionRecord, normalizeSessionRecord, sessionListItem } from './sessionRecord';
+import type { RoundOutcome } from '../types';
 
 const LOCAL_SESSION_DB_KEY = 'card-counter-saved-sessions';
 
@@ -42,6 +45,7 @@ interface AppState {
   undoCard: () => void;
   undoRound: () => void;
   nextRound: () => void;
+  logRoundOutcome: (outcome: RoundOutcome, bet?: number) => void;
   resetShoe: () => void;
   toggleInsurancePrompt: () => void;
 
@@ -128,15 +132,16 @@ export const useStore = create<AppState>()(
         set((s) => {
           const round = s.session.round;
           if (round === 0 && s.session.events.length === 0) return s;
-          // Drop the current round's cards; step back a round if it's now empty.
-          const targetRound = s.session.events.some((e) => e.round === round) ? round : round - 1;
-          const keep = s.session.events.filter((e) => e.round < targetRound);
+          const roundToClear = s.session.events.some((e) => e.round === round) ? round : round - 1;
+          const keep = s.session.events.filter((e) => e.round < roundToClear);
+          const roundOutcomes = s.session.roundOutcomes.filter((o) => o.round !== roundToClear);
           return {
             session: {
               ...s.session,
               events: keep,
               history: s.session.history.slice(0, keep.length),
-              round: Math.max(0, targetRound),
+              round: Math.max(0, roundToClear),
+              roundOutcomes,
               updatedAt: Date.now(),
             },
           };
@@ -144,6 +149,42 @@ export const useStore = create<AppState>()(
 
       nextRound: () =>
         set((s) => ({ session: { ...s.session, round: s.session.round + 1, updatedAt: Date.now() } })),
+
+      logRoundOutcome: (outcome, bet) =>
+        set((s) => {
+          const system = getSystemOrDefault(s.session.systemId);
+          const stats = deriveLiveStats(s.session, system, s.rules, s.settings);
+          const ramp = s.ramps.find((r) => r.id === s.activeRampId) ?? s.ramps[0]!;
+          const bankroll = sessionBankroll(s.session, s.rules.startingBankroll);
+          const defaultBet =
+            bet ??
+            recommendBet(
+              stats.trueCount,
+              ramp,
+              s.rules,
+              bankroll,
+              s.settings.bankrollRiskFraction,
+            ).amount;
+          const wager = Math.max(s.rules.tableMin, defaultBet);
+          const record = buildRoundRecord(
+            s.session.round,
+            outcome,
+            wager,
+            stats.trueCount,
+            stats.runningCount,
+            s.rules.blackjackPayout,
+            makeId('round'),
+          );
+          const without = s.session.roundOutcomes.filter((o) => o.round !== s.session.round);
+          return {
+            session: {
+              ...s.session,
+              roundOutcomes: [...without, record],
+              round: s.session.round + 1,
+              updatedAt: Date.now(),
+            },
+          };
+        }),
 
       resetShoe: () =>
         set((s) => ({
@@ -257,6 +298,9 @@ export const useStore = create<AppState>()(
           return rows.map((r) => ({
             ...r,
             sessionType: r.sessionType as SessionType,
+            netPnL: r.netPnL ?? 0,
+            winRate: r.winRate ?? 0,
+            handsLogged: r.handsLogged ?? 0,
           }));
         }
 
@@ -278,13 +322,14 @@ export const useStore = create<AppState>()(
     }),
     {
       name: 'card-counter-state',
-      version: 1,
+      version: 2,
       migrate: (persisted) => {
         const state = persisted as Record<string, unknown>;
         const session = state.session as Record<string, unknown> | undefined;
         if (session) {
           if (session.sessionType === undefined) session.sessionType = 'practice';
           if (session.shoeResets === undefined) session.shoeResets = 0;
+          if (session.roundOutcomes === undefined) session.roundOutcomes = [];
         }
         return state;
       },
