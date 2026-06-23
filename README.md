@@ -129,4 +129,4 @@ MIT — see [LICENSE](LICENSE).
 
 ## Disclaimer
 
-For training and analysis. Casinos may refuse service to counters. Gamble responsibly.
+For training and analysis. Casinos may refuse service to counters. Gamble responsibly. Or at least entertainingly.
